@@ -10,6 +10,11 @@ Loads CSV data and uses SVG.JS to display a financial chart.
 
 # Timeline
 
+## [2] Add font, create page layout
+* Load Google font Roboto
+* Create "Header Content Footer" grid layout
+* Split Content into SVG area and right sidebar
+
 ## [1] Basic setup
 * Created initial index html/css/js files in public_html directory
 * SVG3.0 library is loaded and SVG.on() used to delay until the DOM is loaded
