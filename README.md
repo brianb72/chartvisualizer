@@ -5,6 +5,9 @@ Loads CSV data and uses SVG.JS to display a financial chart.
 ## Documentation
 * https://svgjs.dev/docs/3.0/getting-started/
 
+## Livedemo
+* https://gentle-travesseiro-22683e.netlify.app/
+
 # Timeline
 
 ## [1] Basic setup
