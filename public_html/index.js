@@ -1,4 +1,4 @@
-import { RenkoPlotter } from './renko_plotter'
+import { RenkoPlotter } from './renko_plotter.js'
 
 // Wait for DOM to load before starting
 console.log('Waiting for DOM...')
