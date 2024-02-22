@@ -14,32 +14,30 @@
 
   <div class="page-container">
     <div class="page-header">
-      <span>Header</span>
+      <span id="header-text">EURUSD 1H Renko</span>
     </div>
 
     <div class="page-content">
-      <div class="content-svg">
-        <span>Content SVG</span>
-      </div>
+      <div id="content-svg"></div>
       <div class="content-sidebar">
-        <span>Content Sidebar</span>
+        <p>Click and Drag: Pan Chart</p>
+        <p>Mousewheel or Pinch: Zoom</p>
+        <p>Hover over brick: Info</p>
       </div>
     </div>
 
     <div class="page-footer">
-      <span>Footer A</span>
+      <span><button id="button-zoom">Reset</button></span>
       <span>Footer B</span>
       <span>Footer C</span>
 
     </div>
   </div>
 
-
-
-
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/@svgdotjs/svg.js@3.0/dist/svg.min.js"></script>
-    <script src="index.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@svgdotjs/svg.panzoom.js@2.1.2/dist/svg.panzoom.min.js "></script>
+    <script type="module" src="index.js"></script>
   
 </body>
 </html>

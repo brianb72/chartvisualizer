@@ -36,7 +36,8 @@ body {
     grid-area: content;
     overflow: hidden;
     display: grid;
-    grid-template-columns: 1fr 450px;
+    grid-template-columns: 100%;
+    grid-template-rows: 80% 20%;
 }
 
 .page-footer {
@@ -49,12 +50,11 @@ body {
     grid-template-columns: 1fr 1fr 1fr;
 }
 
-.content-svg {
-    background-color:greenyellow;
+#content-svg {
     text-align: center;
 }
 
 .content-sidebar {
-    background-color:deepskyblue;
+    background-color: lightgray;
     text-align: center;
 }

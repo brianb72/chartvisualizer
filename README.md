@@ -10,6 +10,14 @@ Loads CSV data and uses SVG.JS to display a financial chart.
 
 # Timeline
 
+## [3] Plotting Renko Chart
+* Added CSV data of EURUSD 1H 10 pip Renko bricks from 2020-2024
+* Draw Renko bricks 10 units by 10 units
+* Draw thin lines every 10 pips, thick lines every 100 pips
+* Hover over brick shows date and values
+* Pan and Zoom control
+* Reset button in footer to reset view
+
 ## [2] Add font, create page layout
 * Load Google font Roboto
 * Create "Header Content Footer" grid layout
