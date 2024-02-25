@@ -56,8 +56,8 @@ export class RenkoPlotter {
     }
 
     onTrendDecayChange(ev, which) {
-        const data = parseFloat(ev['data']);
-        if (data == NaN) { return; }
+        const data = parseFloat(ev.target.value);
+        if (isNaN(data)) { return; }
         if (which == "percent") { this.trendDecayPercent = data; }
         else if (which == "constant") { this.trendDecayConstant = data; }
         else { 
