@@ -37,7 +37,7 @@ body {
     overflow: hidden;
     display: grid;
     grid-template-columns: 100%;
-    grid-template-rows: 80% 20%;
+    grid-template-rows: 85% 15%;
 }
 
 .page-footer {
@@ -57,4 +57,16 @@ body {
 .content-sidebar {
     background-color: lightgray;
     text-align: center;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+ul {
+    list-style-type: none;
+}
+
+.split-label-value {
+    width: 200px;
+    display: grid;
+    grid-template-columns: 1fr 75px;
 }

@@ -20,9 +20,32 @@
     <div class="page-content">
       <div id="content-svg"></div>
       <div class="content-sidebar">
-        <p>Click and Drag: Pan Chart</p>
-        <p>Mousewheel or Pinch: Zoom</p>
-        <p>Hover over brick: Info</p>
+        <div>
+          <div>Numbers "Buy Pressure" : "Sell Pressure"</div>
+          <div>Each block decays by Percent and Constant</div>
+          <div>LightBlue or Brown take no action</div>
+          <div>Blue hold long, Red hold short</div>
+        </div>
+
+        <div>
+          <div class="split-label-value">
+            <span>Percent</span>
+            <input type="number" name="trend-decay-percent" id="trend-decay-percent" min="0.01" max="0.5" step="0.01" value="0.1" autocomplete="off">
+          </div>
+          <div class="split-label-value">
+            <span>Constant</span>
+            <input type="number" name="trend-decay-constant" id="trend-decay-constant" min="0.0" max="1.0" step="0.01" value="1.0" autocomplete="off">
+          </div>
+        </div>
+        <div>
+          <ul>
+          <li>Click and Drag: Pan Chart</li>
+          <li>Mousewheel or Pinch: Zoom</li>
+          <li>Hover over brick: Info</li>
+          </ul>
+        </div>
+
+
       </div>
     </div>
 

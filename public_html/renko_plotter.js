@@ -1,7 +1,9 @@
-import { RENKO_DATA } from "./renko_data.js"
+import { RENKO_DATA } from "./renko_data_1m.js"
 
 export class RenkoPlotter { 
     constructor() {
+        this.trendDecayPercent = 0.1;
+        this.trendDecayConstant = 1;
         this.renko_data = RENKO_DATA; // Load static data here for testing, later on it will come in on the constructor
         this.renko_stats = this.getRenkoDataStats();
         this.state = {
@@ -12,6 +14,7 @@ export class RenkoPlotter {
             mainSVG: undefined,     // The main SVG() object attached to the DOM
             transform: undefined,   // Subgroup of main, receives D3 transform
             // All other layers are under transform
+            counts: undefined,       // Numbers drawn on blocks
             levels: undefined,       // Price level lines
             blocks: undefined,        // Drawn blocks
 
@@ -25,13 +28,15 @@ export class RenkoPlotter {
         zoomButton.onclick = () => this.resetChart();
         let finishCreate = performance.now()
         console.log(`Created RenkoPlotter in ${finishCreate - startCreate}ms`)    
+        this.resetChart()
     }
 
 
     resetChart() {
-        this.svgGroups.mainSVG.viewbox(525, -12750, 1000, 1000);
+        this.svgGroups.mainSVG.viewbox(4565, -11100, 658, 658)
+
         const header = document.getElementById('header-text');
-        header.innerText = 'EURUSD 1H Renko';
+        header.innerText = 'EURUSD 1M Renko';
     }
 
     getRenkoDataStats() {
@@ -49,26 +54,36 @@ export class RenkoPlotter {
         }
     }
 
+    onTrendDecayChange(ev, which) {
+        const data = parseFloat(ev['data']);
+        if (data == NaN) { return; }
+        if (which == "percent") { this.trendDecayPercent = data; }
+        else if (which == "constant") { this.trendDecayConstant = data; }
+        else { 
+            console.log(`onTrendDecayChange unknown which \"${which}\"`)
+        }
+        this.drawCounts()
+    }
 
-    createSVG() {
-        const gr = this.svgGroups;
+    drawCounts() {
+        let block_up = 0;
+        let block_down = 0;
+        this.svgGroups.counts.clear();
 
-        // Create the main SVG object that will hold all drawing
-        gr.mainSVG = SVG()
-            .size("100%", "100%")
-            .viewbox(525, -12750, 1000, 1000)
-            .panZoom()
-
-        // Create the layers that will hold drawn elements
-        gr.blocks = gr.mainSVG.group().attr("id", "blocks")
-        gr.lines = gr.mainSVG.group().attr("id", "lines")
-
-
-        // Draw renko blocks onto the blocks layer
         for (let i = 0; i < this.renko_data.length; ++i) {
             const row = this.renko_data[i];
-            gr.blocks.rect(10, ((row.High * 10000) - (row.Low * 10000)))
-                .move(i * 10, row.High * -10000)
+            const block_y = row.High * -10000;
+            const block_x = i * 10;
+            const block_width = ((row.High * 10000) - (row.Low * 10000))
+            const block_height = 10;
+            block_up = Math.max(0, block_up - this.trendDecayConstant - block_up * this.trendDecayPercent)
+            block_down = Math.max(0, block_down - this.trendDecayConstant - block_down * this.trendDecayPercent)
+            if (row['uptrend']) { block_up += this.trendDecayConstant * 2 }
+            else { block_down += this.trendDecayConstant * 2 }
+            
+            if ((row['uptrend'] && Math.round(block_up) > Math.round(block_down)) || (!row['uptrend'] && Math.round(block_down) > Math.round(block_up))) {
+                this.svgGroups.counts.rect(block_width, block_height)
+                .move(block_x, block_y)
                 .stroke('black')
                 .fill(row['uptrend'] ? 'blue' : 'red')
                 .on('mouseover', () => {
@@ -76,8 +91,59 @@ export class RenkoPlotter {
                     const dateString = new Date(row.Date);
                     header.innerText = `${dateString.toDateString()}: ${row.High} ${row.Low} ${row.uptrend}`;
                 })
+
             }
 
+
+            this.svgGroups.counts
+                .plain(`${Math.round(block_up)}:${Math.round(block_down)}`)
+                .font({
+                    family: "Verdana",
+                    size: 3.5,
+                    fill: "Black",
+                    anchor: "middle",
+                    weight: "bold",
+                })
+                .attr("text-rendering", "optimizeSpeed")
+                .amove(block_x + block_width / 2, block_y + block_height * 0.65)
+        }
+
+    }
+
+    createSVG() {
+        const gr = this.svgGroups;
+
+        // Create the main SVG object that will hold all drawing
+        gr.mainSVG = SVG()
+            .size("100%", "100%")
+            .viewbox(4565, -11100, 658, 658)
+            .panZoom()
+
+        // Create the layers that will hold drawn elements
+        gr.blocks = gr.mainSVG.group().attr("id", "blocks")
+        gr.lines = gr.mainSVG.group().attr("id", "lines")
+        gr.counts = gr.mainSVG.group().attr("id", "counts")
+
+
+        // Draw renko blocks onto the blocks layer
+        for (let i = 0; i < this.renko_data.length; ++i) {
+            const row = this.renko_data[i];
+            const block_y = row.High * -10000;
+            const block_x = i * 10;
+            const block_width = ((row.High * 10000) - (row.Low * 10000))
+            const block_height = 10;
+            gr.blocks.rect(block_width, block_height)
+                .move(block_x, block_y)
+                .stroke('black')
+                .fill(row['uptrend'] ? '#2DA4C2' : '#C34A2C')
+                .on('mouseover', () => {
+                    const header = document.getElementById('header-text');
+                    const dateString = new Date(row.Date);
+                    header.innerText = `${dateString.toDateString()}: ${row.High} ${row.Low} ${row.uptrend}`;
+                })
+        }
+
+        this.drawCounts()
 
         // Draw price level lines onto the lines layer
         for (let i = 5000; i < 20000; i += 100) {

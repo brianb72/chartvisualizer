@@ -10,6 +10,15 @@ Loads CSV data and uses SVG.JS to display a financial chart.
 
 # Timeline
 
+## [4] Trend labeling
+* Right sidebar changed to bottom bar
+* Added EURUSD 1M 10 pip Renko bricks from 2023-09 to 2024-02
+* "Buy Pressure : Sell Pressure" numbers on each block that increment buy on an up block and sell on a down block
+* Each number decays by a percentage and a constant value per block
+* Decay values can be set by spin inputs
+* Draw colors on each block to identify trend.
+* If buy pressure is larger than sell pressure during an upbar, hold a long. Reverse for sell pressure.
+
 ## [3] Plotting Renko Chart
 * Added CSV data of EURUSD 1H 10 pip Renko bricks from 2020-2024
 * Draw Renko bricks 10 units by 10 units
