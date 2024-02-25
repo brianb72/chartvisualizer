@@ -10,6 +10,10 @@ Loads CSV data and uses SVG.JS to display a financial chart.
 
 # Timeline
 
+## [5] Moving average ribbon
+* Updated 1M data with moving averages
+* Added a moving average ribbon of periods 50/100/200
+
 ## [4] Trend labeling
 * Right sidebar changed to bottom bar
 * Added EURUSD 1M 10 pip Renko bricks from 2023-09 to 2024-02

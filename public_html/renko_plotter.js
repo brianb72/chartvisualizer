@@ -15,6 +15,7 @@ export class RenkoPlotter {
             transform: undefined,   // Subgroup of main, receives D3 transform
             // All other layers are under transform
             counts: undefined,       // Numbers drawn on blocks
+            curves: undefined,       // Linedraw curves like moving averages
             levels: undefined,       // Price level lines
             blocks: undefined,        // Drawn blocks
 
@@ -64,6 +65,29 @@ export class RenkoPlotter {
         }
         this.drawCounts()
     }
+
+
+    drawCurves() {
+        const gCurves = this.svgGroups.curves;
+        gCurves.clear();
+        
+        for (let i = 1; i < this.renko_data.length; ++i) {
+            const row = this.renko_data[i];
+            const last50ma = this.renko_data[i-1].ma_50 * -10000;
+            const last100ma = this.renko_data[i-1].ma_100 * -10000;
+            const last200ma = this.renko_data[i-1].ma_200 * -10000;
+            const cur50ma = this.renko_data[i].ma_50 * -10000;
+            const cur100ma = this.renko_data[i].ma_100 * -10000;
+            const cur200ma = this.renko_data[i].ma_200 * -10000;
+            const last_x = (i - 1) * 10;
+            const cur_x = i * 10;
+            if (last50ma && cur50ma) gCurves.line(last_x, last50ma, cur_x, cur50ma).stroke({ width: 2, color: 'green' })
+            if (last100ma && cur100ma) gCurves.line(last_x, last100ma, cur_x, cur100ma).stroke({ width: 5, color: 'blue' })
+            if (last200ma && cur200ma) gCurves.line(last_x, last200ma, cur_x, cur200ma).stroke({ width: 8, color: 'red' })
+        
+        }
+    }
+
 
     drawCounts() {
         let block_up = 0;
@@ -120,10 +144,10 @@ export class RenkoPlotter {
             .panZoom()
 
         // Create the layers that will hold drawn elements
-        gr.blocks = gr.mainSVG.group().attr("id", "blocks")
         gr.lines = gr.mainSVG.group().attr("id", "lines")
+        gr.blocks = gr.mainSVG.group().attr("id", "blocks")
+        gr.curves = gr.mainSVG.group().attr("id", "curves")
         gr.counts = gr.mainSVG.group().attr("id", "counts")
-
 
         // Draw renko blocks onto the blocks layer
         for (let i = 0; i < this.renko_data.length; ++i) {
@@ -143,6 +167,7 @@ export class RenkoPlotter {
                 })
         }
 
+        this.drawCurves()
         this.drawCounts()
 
         // Draw price level lines onto the lines layer
